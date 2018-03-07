@@ -25,9 +25,9 @@
       (load-whisp "test/examples/one-plus-two.whisp"))
     3)
 
-;(it "can handle multiple statements"
-    ;(lambda ()
-      ;(compile-whisp "+ 1 2
-               ;+ 3 4"))
-;"(+ 1 2)
-;(+ 3 4)")
+(it "can handle multiple statements"
+    (lambda ()
+      (compile-whisp "+ 1 2
++ 3 4"))
+"(+ 1 2)
+(+ 3 4)")

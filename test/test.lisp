@@ -6,7 +6,7 @@
 (defun run-test (test)
   (let ((desired (value-for-key test 'desired))
         (test-name (value-for-key test 'test-name))
-        (actual (funcall (value-for-key test 'body))))
+        (actual (handler-case (funcall (value-for-key test 'body)) (error (e) e))))
     (if (equal actual desired)
       (progn
         (princ ".")
