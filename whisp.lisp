@@ -1,3 +1,5 @@
+(load "./split-lines.lisp")
+
 (defun join (strings)
   (let ((all ""))
     (mapcar
@@ -10,10 +12,37 @@
     strings)
     (string-trim '(#\newline) all)))
 
+(defun indents (line &optional (number 0))
+  (if (and (< 0 (length line)) (string= (subseq line 0 2) "  "))
+    (indents (subseq line 2) (+ number 1))
+    number))
+
 (defun compile-whisp (whisp)
-  (let ((lines (split-lines whisp)))
-    (join (mapcar (lambda (line)
-                   (format nil "(~a)" line)) lines))))
+  (let ((lines (split-lines whisp))
+        (previous-line "")
+        (to-close 0)
+        (index 0))
+    (join
+      (mapcar
+        (lambda (line)
+          (let ((offset-count (indents line))
+                (offset (make-string (* 2 (indents line)) :initial-element #\space)))
+            (if (< offset-count (indents (nth (1+ index) lines)))
+              (progn
+                (setf previous-line line)
+                (incf index)
+                (incf to-close)
+                (format nil "~a(~a" offset (string-trim '(#\space) line)))
+              (progn
+                (setf previous-line line)
+                (incf index)
+                (decf offset-count)
+                (format nil "~a(~a)~a"
+                        offset
+                        (string-trim '(#\space) line)
+                        (make-string (1+ offset-count) :initial-element #\))
+                        )))))
+      lines))))
 
 (defun eval-whisp (whisp)
   (eval (read-from-string (compile-whisp whisp))))

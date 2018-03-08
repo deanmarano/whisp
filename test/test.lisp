@@ -29,7 +29,7 @@
         (mapcar
           (lambda (failure)
             (princ
-              (format nil "it \"~a\"   Desired: ~a   Actual ~a~%"
+              (format nil "it \"~a\"   ~%Desired: ~a   ~%Actual: ~a~%"
                       (value-for-key failure 'test-name)
                       (value-for-key failure 'desired)
                       (value-for-key failure 'actual))))
@@ -39,6 +39,8 @@
   (setq *tests*
         (append *tests*
                 (list `((test-name . ,test-name) (body . ,body) (desired . ,desired))))))
+
+(defun xit (_ _ _))
 
 (if *args*
   (progn
