@@ -57,7 +57,7 @@
   (+ 2 3
     (+ 4 5)))")
 
-(xit "if statements work"
+(it "if statements work"
     (lambda ()
       (compile-whisp
 "if T

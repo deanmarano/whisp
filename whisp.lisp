@@ -1,4 +1,5 @@
 (load "./split-lines.lisp")
+(load "./format-line.lisp")
 
 (defun join (strings)
   (let ((all ""))
@@ -19,29 +20,27 @@
 
 (defun compile-whisp (whisp)
   (let ((lines (split-lines whisp))
-        (previous-line "")
         (to-close 0)
+        (close-now 0)
         (index 0))
     (join
       (mapcar
         (lambda (line)
+          (setf close-now 0)
           (let ((offset-count (indents line))
-                (offset (make-string (* 2 (indents line)) :initial-element #\space)))
-            (if (< offset-count (indents (nth (1+ index) lines)))
+                (next-line-offset (indents (nth (1+ index) lines))))
+            (if (< offset-count next-line-offset)
+              (setf to-close (1+ to-close)))
+            (if (= offset-count next-line-offset)
+              (incf close-now))
+            (if (> offset-count next-line-offset)
               (progn
-                (setf previous-line line)
-                (incf index)
-                (incf to-close)
-                (format nil "~a(~a" offset (string-trim '(#\space) line)))
-              (progn
-                (setf previous-line line)
-                (incf index)
-                (decf offset-count)
-                (format nil "~a(~a)~a"
-                        offset
-                        (string-trim '(#\space) line)
-                        (make-string (1+ offset-count) :initial-element #\))
-                        )))))
+                (loop for i from 0 to (- offset-count next-line-offset)
+                      do (progn
+                           (incf close-now)
+                           (decf to-close)))))
+            (incf index)
+            (format-line offset-count line close-now)))
       lines))))
 
 (defun eval-whisp (whisp)
@@ -53,7 +52,6 @@
     (let ((contents (make-string (file-length stream))))
       (read-sequence contents stream)
       contents)))
-
 
 (defun load-whisp (filename)
   (let ((input (file-get-contents filename)))
