@@ -3,7 +3,7 @@
 (load "join-strings.lisp")
 (load "split-string.lisp")
 
-(defun compile-whisp (whisp)
+(defun whisp-compile (whisp)
   (let ((lines (split-string whisp))
         (to-close 0)
         (close-now 0)

@@ -1,15 +1,17 @@
-; From http://sodaware.sdf.org/notes/cl-read-file-into-string/
-(defun file-get-contents (filename)
-  (with-open-file (stream filename)
-    (let ((contents (make-string (file-length stream))))
-      (read-sequence contents stream)
-      contents)))
+(load "read-file.lisp")
+(load "whisp-compile.lisp")
 
-(defun eval-whisp (whisp)
-  (eval (read-from-string (compile-whisp whisp))))
+(defun whisp-eval (whisp)
+  (eval (read-from-string (whisp-compile whisp))))
 
-(defun read-whisp (filename)
-  (compile-whisp (file-get-contents filename)))
+(defun whisp-read (filename)
+  (whisp-compile (read-file filename)))
 
-(defun load-whisp (filename)
-  (eval (read-from-string (read-whisp filename))))
+(defun whisp-load (filename)
+  (eval (read-from-string (whisp-read filename))))
+
+(defun whisp-repl ()
+  (loop (progn
+          (fresh-line)
+          (princ "> ")
+          (print (whisp-eval (read-line))))))

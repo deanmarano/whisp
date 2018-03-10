@@ -1,20 +1,20 @@
-(load "compile-whisp.lisp")
+(load "whisp-compile.lisp")
 
 (it "prints hello world"
     (lambda ()
-      (compile-whisp "print \"hello world\""))
+      (whisp-compile "print \"hello world\""))
     "(print \"hello world\")")
 
 (it "can handle multiple statements"
     (lambda ()
-      (compile-whisp "+ 1 2
+      (whisp-compile "+ 1 2
 + 3 4"))
 "(+ 1 2)
 (+ 3 4)")
 
 (it "works with indented statements"
     (lambda ()
-      (compile-whisp
+      (whisp-compile
 "+ 1
   + 2 3"))
 "(+ 1
@@ -22,7 +22,7 @@
 
 (it "works with more indented statements"
     (lambda ()
-      (compile-whisp
+      (whisp-compile
 "+ 1
   + 2 3
     + 4 5"))
@@ -32,7 +32,7 @@
 
 (it "if statements work"
     (lambda ()
-      (compile-whisp
+      (whisp-compile
 "if T
   + 1 2
   + 3 4"))

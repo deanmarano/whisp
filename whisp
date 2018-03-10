@@ -1,0 +1,31 @@
+#! /usr/bin/clisp
+
+(when (or (zerop (length *args*))
+    (string= (car *args*) "repl"))
+  (load "whisp.lisp")
+  (whisp-repl))
+
+(when (string= (car *args*) "test")
+  (load "test/test.lisp")
+  (if (null (cadr *args*))
+    (progn
+      (load "test/whisp.lisp")
+      (load "test/split-string.lisp")
+      (load "test/count-indents.lisp")
+      (load "test/format-line.lisp")
+      (load "test/whisp-compile.lisp")
+      (run-tests))
+    (progn
+      (mapcar #'load (cdr *args*))
+      (run-tests))))
+
+(when (or (string= (car *args*) "-h")
+          (string= (car *args*) "--help")
+          (string= (car *args*) "help"))
+  (load "read-file.lisp")
+  (princ (read-file "README.md")))
+
+(when (or (string= (car *args*) "c")
+          (string= (car *args*) "compile"))
+  (load "whisp.lisp")
+  (princ (whisp-read (cadr *args*))))

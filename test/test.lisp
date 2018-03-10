@@ -45,16 +45,3 @@
 ; easy way to comment out tests
 (defun xit (_ _ _) (declare (ignore _)))
 
-; if command line args are passed only run those test files
-(if *args*
-  (progn
-    (mapcar #'load *args*)
-    (run-tests))
-  ; otherwise run all test files - TODO: make this dynamic
-  (progn
-    (load "test/whisp.lisp")
-    (load "test/split-string.lisp")
-    (load "test/count-indents.lisp")
-    (load "test/format-line.lisp")
-    (load "test/compile-whisp.lisp")
-    (run-tests)))
