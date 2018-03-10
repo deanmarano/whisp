@@ -10,10 +10,6 @@
       T
       ) T)
 
-(it "prints hello world"
-    (lambda ()
-      (compile-whisp "print \"hello world\""))
-    "(print \"hello world\")")
 
 ;(it "can add numbers"
     ;(lambda ()
@@ -25,20 +21,7 @@
       (load-whisp "test/examples/one-plus-two.whisp"))
     3)
 
-(it "can handle multiple statements"
-    (lambda ()
-      (compile-whisp "+ 1 2
-+ 3 4"))
-"(+ 1 2)
-(+ 3 4)")
 
-(it "works with indented statements"
-    (lambda ()
-      (compile-whisp
-"+ 1
-  + 2 3"))
-"(+ 1
-  (+ 2 3))")
 
 (it "works with indented statements"
     (lambda ()
@@ -47,37 +30,19 @@
   + 2 3"))
     6)
 
-(it "works with more indented statements"
-    (lambda ()
-      (compile-whisp
-"+ 1
-  + 2 3
-    + 4 5"))
-"(+ 1
-  (+ 2 3
-    (+ 4 5)))")
 
-(it "if statements work"
+(it "compiles a factorial function"
     (lambda ()
-      (compile-whisp
-"if T
-  + 1 2
-  + 3 4"))
-"(if T
-  (+ 1 2)
-  (+ 3 4))")
+      (read-whisp "test/examples/factorial.whisp"))
+"(defun factorial (n)
+  (if (< n 2)
+    1
+    (* n (factorial (- n 1)))))"
+    )
 
-(it "counts no indentations (ha ha ha)"
+(it "runs a factorial function"
     (lambda ()
-      (indents "+ 1 2"))
-    0)
-
-(it "counts one indentation (ha ha ha)"
-    (lambda ()
-      (indents "  + 1 2"))
-    1)
-
-(it "counts two indentations  (ha ha ha)"
-    (lambda ()
-      (indents "    + 1 2"))
-    2)
+      (load-whisp "test/examples/factorial.whisp")
+      (factorial 5)
+      )
+    120)

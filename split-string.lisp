@@ -1,9 +1,9 @@
-(defun split-lines (text)
+(defun split-string (text &optional (delimiter #\newline))
   (let ((line "")
         (lines ()))
     (map nil
          (lambda (c)
-           (if (eq c #\newline)
+           (if (eq c delimiter)
              (progn
                (setf lines (concatenate 'list lines (list line)))
                (setf line "")

@@ -1,5 +1,6 @@
 (defvar *tests* (list))
 
+; make getting values from an alist more obvious for me
 (defun value-for-key (obj key)
   (cdr (assoc key obj)))
 
@@ -35,18 +36,25 @@
                       (value-for-key failure 'actual))))
           failed)))))
 
+; we want to collect all of the tests before we run them.
 (defun it (test-name body desired)
   (setq *tests*
         (append *tests*
                 (list `((test-name . ,test-name) (body . ,body) (desired . ,desired))))))
 
-(defun xit (_ _ _))
+; easy way to comment out tests
+(defun xit (_ _ _) (declare (ignore _)))
 
+; if command line args are passed only run those test files
 (if *args*
   (progn
     (mapcar #'load *args*)
     (run-tests))
+  ; otherwise run all test files - TODO: make this dynamic
   (progn
     (load "test/whisp.lisp")
-    (load "test/split-lines.lisp")
+    (load "test/split-string.lisp")
+    (load "test/count-indents.lisp")
+    (load "test/format-line.lisp")
+    (load "test/compile-whisp.lisp")
     (run-tests)))

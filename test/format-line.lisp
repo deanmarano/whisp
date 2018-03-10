@@ -15,13 +15,27 @@
       (format-line 1 "+ 1 2" 0))
     "  (+ 1 2")
 
-; if the next line is indented further
-; leave it open
+(it "returns nothing for empty lines"
+  (lambda ()
+    (format-line 0 "" 0))
+  "")
 
-; if the next line is the same indent
-; close that line but leave other lines open
+(it "doesn't wrap with parens if line is a number"
+  (lambda ()
+    (format-line 0 "1" 1))
+  "1")
 
-; if the next line is empty, close out
+(it "doesn't wrap with parens if line is a string"
+  (lambda ()
+    (format-line 0 "\"hello\"" 1))
+  "\"hello\"")
 
-; if the next line is indented less
-; close out indents - to-close
+(it "doesn't wrap with parens if line is data"
+  (lambda ()
+    (format-line 0 "'(1 2 3)" 1))
+  "'(1 2 3)")
+
+(it "knows a data line"
+  (lambda ()
+    (is-data-p "'(1 2 3)"))
+  T)

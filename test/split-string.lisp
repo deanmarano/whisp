@@ -1,15 +1,15 @@
-(load "./split-lines.lisp")
+(load "./split-string.lisp")
 
 (it "can split two lines into multiple lines"
     (lambda ()
-      (split-lines
+      (split-string
 "Hello
 world"))
     '("Hello" "world"))
 
 (it "can split two lines into multiple lines"
     (lambda ()
-      (split-lines
+      (split-string
 "Hello
 new
 world"))
